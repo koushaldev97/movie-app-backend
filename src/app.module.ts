@@ -3,6 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { MoviesModule } from './movies/movies.module';
 import { Movie } from './movies/movie.entity';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { User } from './users/user.entity';
 
 @Module({
   imports: [
@@ -14,10 +17,12 @@ import { Movie } from './movies/movie.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Movie],
-      synchronize: true, 
+      entities: [Movie, User],
+      synchronize: true,
     }),
     MoviesModule,
+    UsersModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
