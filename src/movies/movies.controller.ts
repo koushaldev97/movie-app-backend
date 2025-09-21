@@ -7,6 +7,8 @@ import {
   Delete,
   HttpException,
   HttpStatus,
+  ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -22,7 +24,14 @@ export class MoviesController {
   }
 
   @Get()
-  async findAll(): Promise<Movie[]> {
+  async getMovies(
+    @Query('page', ParseIntPipe) page?: number,
+    @Query('limit', ParseIntPipe) limit?: number,
+  ) {
+    if (page && limit) {
+      return this.moviesService.findAllPaginated(page, limit);
+    }
+
     return this.moviesService.findAll();
   }
 

@@ -27,4 +27,28 @@ export class MoviesService {
   remove(id: number) {
     return this.movieRepo.delete(id);
   }
+
+  async findAllPaginated(
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<{
+    data: Movie[];
+    total: number;
+    page: number;
+    lastPage: number;
+  }> {
+    const skip = (page - 1) * limit;
+
+    const [movies, total] = await this.movieRepo.findAndCount({
+      skip,
+      take: limit,
+    });
+
+    return {
+      data: movies,
+      total,
+      page,
+      lastPage: Math.ceil(total / limit),
+    };
+  }
 }
